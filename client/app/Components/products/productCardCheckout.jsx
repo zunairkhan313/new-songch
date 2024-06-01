@@ -1,19 +1,19 @@
 "use client";
 import React from "react";
-import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
+// import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { addCart } from "@/redux/slices/cartSlice";
+// import { addCart } from "@/redux/slices/cartSlice";
 
-export default function ProductCardCart() {
-  const dispatch = useDispatch();
+export default function ProductCardCheckout() {
+//   const dispatch = useDispatch();
 
   const { cart } = useSelector((state) => state.cart);
 
-  const removeFromCart = (id) => {
-    let tempArr = [...cart].filter((item) => item.id !== id);
-    dispatch(addCart(tempArr));
-  };
+//   const removeFromCart = (id) => {
+//     let tempArr = [...cart].filter((item) => item.id !== id);
+//     dispatch(addCart(tempArr));
+//   };
 
   return cart?.length > 0
     ? cart?.map((item, index) => (
@@ -45,7 +45,7 @@ export default function ProductCardCart() {
             <div className="price mt-4">
               <h5 className="font-sans font-bold">{item.price}</h5>
             </div>
-            <div
+            {/* <div
             
               className="deleteicon mt-3"
               onClick={() => removeFromCart(item.id)}
@@ -53,7 +53,7 @@ export default function ProductCardCart() {
               <h3 style={{ marginTop: "6px",cursor:"pointer" }}>
                 <DeleteForeverSharpIcon />
               </h3>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
