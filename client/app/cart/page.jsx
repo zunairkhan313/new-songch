@@ -2,7 +2,7 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-import ClientCart from '../Components/ClientCart';
+// import ClientCart from '../Components/ClientCart';
 
 
 export default async function Cart() {
@@ -16,7 +16,7 @@ export default async function Cart() {
           background-color: white;
         }
         `}</style>
-      <ClientCart />
+      {/* <ClientCart /> */}
     </>
   );
 }

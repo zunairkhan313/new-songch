@@ -1,68 +1,80 @@
-
-
-
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import "../Components/hr.css";
-import TopicsList from '../Components/FetchProducts';
+import TopicsList from "../Components/FetchProducts";
 
 const Admin = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [img, setImg] = useState("");
 
+  // const imagebase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (err) => reject(err);
+  //   });
+  // };
 
+  // const handleUploadImage = async (e) => {
+  //   const file = e.target.files[0];
+  //   const image = await imagebase64(file);
+  //   setImg(image);
+  // };
 
-  const imagebase64 = (file) => {
-    return new Promise((resolve, reject) => {
+  const handleUploadImage = (e) => {
+    const files = e.target.files;
+    const urls = [];
+
+    for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (err) => reject(err);
-    });
-  };
 
-  const handleUploadImage = async (e) => {
-    const file = e.target.files[0];
-    const image = await imagebase64(file);
-    setImg(image);
+      reader.onload = (e) => {
+        urls.push(e.target.result);
+        if (urls.length === files.length) {
+          setImg(urls);
+        }
+      };
+
+      reader.readAsDataURL(files[i]);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (img) {
-      try {
-        const res = await fetch("http://localhost:8080/upload", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({ img }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert(data.message);
-          setImg("");
-          fetchImages();
-          router.push("/product")
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
-    }
+    // if (img) {
+    //   try {
+    //     const res = await fetch("http://localhost:8080/upload", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-type": "application/json",
+    //       },
+    //       body: JSON.stringify({ img }),
+    //     });
+    //     const data = await res.json();
+    //     if (data.success) {
+    //       alert(data.message);
+    //       setImg("");
+    //       fetchImages();
+    //       router.push("/product");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error uploading image:", error);
+    //   }
+    // }
 
     try {
-      const res = await fetch("http://localhost:3000/api/topics", {
+      const res = await fetch("http://localhost:3000/api/products", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description, img }),
       });
 
       if (res.ok) {
@@ -75,8 +87,6 @@ const Admin = () => {
     }
   };
 
- 
-
   return (
     <>
       <style>{`
@@ -88,14 +98,23 @@ const Admin = () => {
         <div className="lg:text-5xl md:text-3xl sm:text-2xl font-extrabold tracking-wider bgVideoText">
           <h1 className="heading text-black font-bold">Admin Panel</h1>
         </div>
-        <div className="hr-admin"></div><br /><br />
+        <div className="hr-admin"></div>
+        <br />
+        <br />
         <div className="flex justify-around">
           <div className="col-lg-6 col-md-6">
             <form onSubmit={handleSubmit}>
-              <div style={{ border: "1px solid gray" }} className="container mt-5 p-4 rounded border-gray-200">
-                <h1 className="text-3xl font-bold text-center mb-1">Add Product</h1>
-                <hr /><br />
-                <label>Title</label><br />
+              <div
+                style={{ border: "1px solid gray" }}
+                className="container mt-5 p-4 rounded border-gray-200"
+              >
+                <h1 className="text-3xl font-bold text-center mb-1">
+                  Add Product
+                </h1>
+                <hr />
+                <br />
+                <label>Title</label>
+                <br />
                 <input
                   onChange={(e) => setTitle(e.target.value)}
                   value={title}
@@ -103,7 +122,8 @@ const Admin = () => {
                   type="text"
                   placeholder="Title"
                 />
-                <br /><br />
+                <br />
+                <br />
                 <label>Description</label>
                 <input
                   value={description}
@@ -112,14 +132,25 @@ const Admin = () => {
                   type="text"
                   placeholder="Description"
                 />
-                <br /><br />
-                <label htmlFor="file-upload" className="custom-file-upload1 w-[100%]">
+                <br />
+                <br />
+                <label
+                  htmlFor="file-upload"
+                  className="custom-file-upload1 w-[100%]"
+                >
                   <div className="flex justify-between">
                     <div>Image Upload</div>
-                    <div><ControlPointIcon /></div>
+                    <div>
+                      <ControlPointIcon />
+                    </div>
                   </div>
                 </label>
-                <input id="file-upload" type="file" className="w-[100%]"  onClick={handleUploadImage}/>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="w-[100%]"
+                  onClick={handleUploadImage}
+                />
                 <br />
                 <div className="container px-10 mx-0 min-w-full flex flex-col items-center">
                   <button
@@ -133,7 +164,6 @@ const Admin = () => {
             </form>
           </div>
         </div>
-
       </div>
     </>
   );
