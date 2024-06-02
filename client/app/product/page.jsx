@@ -7,7 +7,7 @@ import Link from "next/link";
 import data_products from "../Assests/product";
 import ProductCard from "../Components/products/productCard";
 import React, { useState, useEffect } from "react";
-
+import config from "@/utils/config";
 
 const Product = () => {
   const { data: session } = useSession();
@@ -23,20 +23,21 @@ const Product = () => {
     );
   }
 
-  const [allImage, setAllImage] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
+  const handleGetProducts = async () => {
+    try {
+      fetch(`http://localhost:3000/api/products`)
+        .then((res) => res.json())
+        .then((data) => setAllProducts(data.Products || []))
+        .catch((err) => console.log(err));
+    } catch (error) {
+      console.error("Error creating topic:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/");
-        const data = await res.json();
-        setAllImage(data);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
-
-    fetchImages();
+    handleGetProducts();
   }, []);
 
   return (
@@ -57,15 +58,14 @@ const Product = () => {
           </div>
           <div className="hr-products"></div>
           <div className="flex flex-wrap justify-around">
-            {data_products.map((item, i) => (
+            {allProducts.map((item, i) => (
               <ProductCard key={i} item={item} />
             ))}
           </div>
         </div>
 
-
-        <div className="flex flex-wrap justify-around">
-        {allImage.map((el, index) => (
+        {/* <div className="flex flex-wrap justify-around">
+          {allImage.map((el, index) => (
             <div
               key={index}
               style={{ height: "100%", width: 300 }}
@@ -117,9 +117,7 @@ const Product = () => {
               </div>
             </div>
           ))}
-        </div>
-
-
+        </div> */}
       </div>
     </>
   );

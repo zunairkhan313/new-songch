@@ -5,27 +5,12 @@ import { useRouter } from "next/navigation";
 
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import "../Components/hr.css";
-import TopicsList from "../Components/FetchProducts";
+import config from "@/utils/config";
 
 const Admin = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [img, setImg] = useState("");
-
-  // const imagebase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (err) => reject(err);
-  //   });
-  // };
-
-  // const handleUploadImage = async (e) => {
-  //   const file = e.target.files[0];
-  //   const image = await imagebase64(file);
-  //   setImg(image);
-  // };
 
   const handleUploadImage = (e) => {
     const files = e.target.files;
@@ -47,29 +32,8 @@ const Admin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (img) {
-    //   try {
-    //     const res = await fetch("http://localhost:8080/upload", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-type": "application/json",
-    //       },
-    //       body: JSON.stringify({ img }),
-    //     });
-    //     const data = await res.json();
-    //     if (data.success) {
-    //       alert(data.message);
-    //       setImg("");
-    //       fetchImages();
-    //       router.push("/product");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error uploading image:", error);
-    //   }
-    // }
-
     try {
-      const res = await fetch("http://localhost:3000/api/products", {
+      const res = await fetch(`http://localhost:3000/api/products`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

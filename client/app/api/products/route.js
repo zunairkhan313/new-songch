@@ -14,6 +14,7 @@ cloudinary.config({
 
 export async function POST(request) {
   const { title, description, img } = await request.json();
+  // console.log(title, description, img);
   await connectMongoDB();
   const response = await cloudinary.uploader.upload(img[0]);
   await Product.create({ title, description, image: response.url });
